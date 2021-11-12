@@ -1,6 +1,6 @@
 # xblue
 
-<h3> maven { url 'https://jitpack.io' }  </h3>
+<h3> 添加 maven { url 'https://jitpack.io' }  </h3>
 <h3> 添加 implementation 'com.github.AnglePengCoding:xblue:xblue1.0' </h3>
 
 <h4>效果图</h4>
@@ -10,9 +10,8 @@
 
 <h4> 使用 </h4>
 
-` `` 
-
- mBtScan.setOnClickListener(new View.OnClickListener() {
+```java 
+mBtScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 builder = new XBluetooth
@@ -26,9 +25,21 @@
                                 adapter.setNewData(addDeviceList);
                             }
                         });
-` `` 
+```
+<h4> 已配对过蓝牙数据 </h4>
 
-  <h4>  功能支持 </h4>
+```java 
+.scanHistoryCallBack(new IHistoryBlueTooth() {
+      @Override
+      public void historyData(List<BluetoothDevice> historyDeviceList) { } })
+```
+
+
+  <h3>  功能支持 </h3>
+  <h4>  支持蓝牙名字显示</h4>
+  <h4>  支持一键搜索</h4>
+  <h4>  支持只显示打印机的蓝牙</h4>
+  <h4> 支持已配对的蓝牙数据</h4>
+
   
-  
-  
+ <h3>新功能正在完善，如果您有什么建议或者功能请联系我的邮箱1016305858@qq.com </h3> 
