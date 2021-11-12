@@ -1,3 +1,5 @@
+[![](https://jitpack.io/v/AnglePengCoding/xblue.svg)](https://jitpack.io/#AnglePengCoding/xblue)
+
 # xblue
 
 <h3> 添加 maven { url 'https://jitpack.io' }  </h3>
@@ -33,7 +35,6 @@ mBtScan.setOnClickListener(new View.OnClickListener() {
       @Override
       public void historyData(List<BluetoothDevice> historyDeviceList) { } })
 ```
-[![](https://jitpack.io/v/AnglePengCoding/xblue.svg)](https://jitpack.io/#AnglePengCoding/xblue)
 
 
 
