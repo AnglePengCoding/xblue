@@ -33,6 +33,8 @@ mBtScan.setOnClickListener(new View.OnClickListener() {
       @Override
       public void historyData(List<BluetoothDevice> historyDeviceList) { } })
 ```
+[![](https://jitpack.io/v/AnglePengCoding/xblue.svg)](https://jitpack.io/#AnglePengCoding/xblue)
+
 
 
   <h3>  功能支持 </h3>
