@@ -5,5 +5,5 @@
 
 <h4>效果图</h4>
 
-<img src="https://github.com/AnglePengCoding/xblue/blob/main/app/device-2021-11-08-162859.png" width="100px">
+<img src="https://github.com/AnglePengCoding/xblue/blob/main/app/device-2021-11-08-162859.png" width="150px">
 
