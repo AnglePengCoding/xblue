@@ -1,0 +1,17 @@
+package com.github.anglepengcoding.xblue;
+
+import android.bluetooth.BluetoothDevice;
+
+
+import java.util.List;
+
+/**
+ * Created by 刘红鹏 on 2021/11/7.
+ * <p>https://github.com/AnglePengCoding</p>
+ * <p>https://blog.csdn.net/LIU_HONGPENG</p>
+ */
+
+public interface IBlueTooth {
+
+    void blueData(List<BluetoothDevice> addDeviceList);
+}
