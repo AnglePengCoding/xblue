@@ -5,6 +5,5 @@
 
 <h4>效果图</h4>
 
-![Image text](https://github.com/AnglePengCoding/xblue/blob/main/app/device-2021-11-08-162859.png)
-
+<img src="https://github.com/AnglePengCoding/xblue/blob/main/app/device-2021-11-08-162859.png" width="100px">
 
