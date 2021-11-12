@@ -10,7 +10,7 @@
 
 <h4> 使用 </h4>
 
-<java  > 
+` `` 
 
  mBtScan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -26,7 +26,7 @@
                                 adapter.setNewData(addDeviceList);
                             }
                         });
-</java>
+` `` 
 
   <h4>  功能支持 </h4>
   
