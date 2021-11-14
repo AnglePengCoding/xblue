@@ -46,6 +46,9 @@ public class BluetoothManger {
     private Handler mAlertHandler;
     public List<BluetoothDevice> historyDeviceList;
     public IHistoryBlueTooth historyBlueTooth;
+    public String address;
+    public IBluetState bluetState;
+    public IBlueToothPairState blueToothPairState;
 
     public BluetoothManger() {
         HandlerThread thread = new HandlerThread("bluetooth searcher handler");
@@ -185,13 +188,21 @@ public class BluetoothManger {
                 switch (device.getBondState()) {
                     case BluetoothDevice.BOND_BONDING:
                         //正在配对
+                        if (blueToothPairState!=null){
+                            blueToothPairState.bond_bonding();
+                        }
                         break;
                     case BluetoothDevice.BOND_BONDED:
                         //完成配对
-
+                        if (blueToothPairState!=null){
+                            blueToothPairState.bond_bonded();
+                        }
                         break;
                     case BluetoothDevice.BOND_NONE:
                         //取消配对
+                        if (blueToothPairState!=null){
+                            blueToothPairState.bond_none();
+                        }
                     default:
                         break;
                 }
@@ -208,18 +219,30 @@ public class BluetoothManger {
                 switch (state) {
                     case BluetoothAdapter.STATE_OFF:
                         Log.e(TAG, " BluetoothDevice ACTION_STATE_CHANGED 手机蓝牙关闭");
+                        if (bluetState != null) {
+                            bluetState.state_off();
+                        }
                         //手机蓝牙关闭
                         break;
                     case BluetoothAdapter.STATE_TURNING_OFF:
                         //手机蓝牙正在关闭
                         Log.e(TAG, " BluetoothDevice ACTION_STATE_CHANGED 手机蓝牙正在关闭");
+                        if (bluetState != null) {
+                            bluetState.state_turning_off();
+                        }
                         break;
                     case BluetoothAdapter.STATE_ON:
                         //手机蓝牙开启
                         Log.e(TAG, " BluetoothDevice STATE_ON 手机蓝牙正在关闭");
+                        if (bluetState != null) {
+                            bluetState.state_on();
+                        }
                         break;
                     case BluetoothAdapter.STATE_TURNING_ON:
                         Log.e(TAG, " BluetoothDevice STATE_TURNING_ON 手机蓝牙正在开启");
+                        if (bluetState != null) {
+                            bluetState.state_turning_on();
+                        }
                         //手机蓝牙正在开启
                         break;
                 }

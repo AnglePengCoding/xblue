@@ -15,7 +15,6 @@ public class XBluetooth {
 
         private final BluetoothManger manger = new BluetoothManger();
 
-        private Activity activity;
 
         public Builder(Activity activity) {
             this.manger.activity = activity;
@@ -55,6 +54,16 @@ public class XBluetooth {
         }
 
         /**
+         * 连接蓝牙地址
+         * @param address
+         * @return
+         */
+        public Builder connect(String address ) {
+            this.manger.address= address;
+            return this;
+        }
+
+        /**
          * 取消扫描
          *
          * @return
@@ -75,9 +84,35 @@ public class XBluetooth {
             return this;
         }
 
+        /**
+         * 销毁广播
+         * @param activity
+         * @return
+         */
         public Builder unregisterReceiver(Activity activity) {
             this.manger.unregisterReceiver(activity);
             return this;
         }
+
+        /**
+         * 手机蓝牙连接状态监听
+         * @param bluetState
+         * @return
+         */
+        public Builder blueToothState(IBluetState bluetState) {
+            this.manger.bluetState = bluetState;
+            return this;
+        }
+
+        /**
+         * 蓝牙配对状态
+         * @param blueToothPairState
+         * @return
+         */
+        public Builder blueToothPairState(IBlueToothPairState blueToothPairState) {
+            this.manger.blueToothPairState = blueToothPairState;
+            return this;
+        }
+
     }
 }
