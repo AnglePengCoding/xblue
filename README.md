@@ -44,7 +44,7 @@ mBtScan.setOnClickListener(new View.OnClickListener() {
 <h4> 优雅使用 </h4>
 
 ```java 
-new XBluetooth
+                        new XBluetooth
                         .Builder(MainActivity.this)
                         .scanBlueTooth(true, 5000) //开启扫描 停止时间
                         .scanIsPrint(true)//true 显示打印机的蓝牙 false显示全部数据
