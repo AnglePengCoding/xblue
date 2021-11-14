@@ -2,8 +2,20 @@
 
 # xblue
 
-<h3> 添加 maven { url 'https://jitpack.io' }  </h3>
-<h3> 添加  implementation 'com.github.AnglePengCoding:xblue:1.1' </h3>
+<h3>工程目录添加 </h3>
+
+```java  
+maven { url 'https://jitpack.io' } 
+
+```
+
+
+<h3>build添加 </h3>
+
+```java  
+implementation 'com.github.AnglePengCoding:xblue:1.1'
+
+```
 
 <h4>效果图</h4>
 
