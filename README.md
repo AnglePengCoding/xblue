@@ -41,6 +41,24 @@ mBtScan.setOnClickListener(new View.OnClickListener() {
                         });
 ```
 
+<h4> 优雅使用 </h4>
+
+```java 
+new XBluetooth
+                        .Builder(MainActivity.this)
+                        .scanBlueTooth(true, 5000) //开启扫描 停止时间
+                        .scanIsPrint(true)//true 显示打印机的蓝牙 false显示全部数据
+                        .cancel()//取消扫描
+                        .scanCallBack(new IBlueTooth() {//搜索到蓝牙设备
+                            @Override
+                            public void blueData(List<BluetoothDevice> addDeviceList) {
+                                adapter.setNewData(addDeviceList);
+                            }
+                        });
+
+```
+
+
 <h4> 历史配对过的蓝牙 </h4>
 
 ```java 
