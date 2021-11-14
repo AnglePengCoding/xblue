@@ -3,7 +3,7 @@
 # xblue
 
 <h3> 添加 maven { url 'https://jitpack.io' }  </h3>
-<h3> 添加  implementation 'com.github.AnglePengCoding:xblue:1.0' </h3>
+<h3> 添加  implementation 'com.github.AnglePengCoding:xblue:1.1' </h3>
 
 <h4>效果图</h4>
 
