@@ -28,15 +28,68 @@ mBtScan.setOnClickListener(new View.OnClickListener() {
                             }
                         });
 ```
-<h4> 已配对过蓝牙数据 </h4>
+
+<h4> 历史配对过的蓝牙 </h4>
 
 ```java 
-.scanHistoryCallBack(new IHistoryBlueTooth() {
-      @Override
-      public void historyData(List<BluetoothDevice> historyDeviceList) { } })
+.scanHistoryCallBack(new IHistoryBlueTooth() {//历史配过的蓝牙
+                            @Override
+                            public void historyData(List<BluetoothDevice> historyDeviceList) {
+
+                            }
+                        })
+
 ```
 
+<h4>手机蓝牙状态监听 </h4>
 
+```java 
+.blueToothState(new IBluetState() {
+                            @Override
+                            public void state_off() {
+                                //手机蓝牙关闭
+                            }
+
+                            @Override
+                            public void state_turning_off() {
+                                //手机蓝牙正在关闭
+                            }
+
+                            @Override
+                            public void state_on() {
+                                //手机蓝牙开启
+                            }
+
+                            @Override
+                            public void state_turning_on() {
+                                //手机蓝牙正在开启
+                            }
+                        })
+```
+
+<h4>蓝牙连接状态监听 </h4>
+
+```java 
+
+.blueToothPairState(new IBlueToothPairState() {
+                            @Override
+                            public void bond_bonding() {
+                                //正在配对
+                            }
+
+                            @Override
+                            public void bond_bonded() {
+                                //完成配对
+                            }
+
+                            @Override
+                            public void bond_none() {
+                                //取消配对
+                            }
+                        })
+
+
+```
 
   <h3>  功能支持 </h3>
   <h4>  支持蓝牙名字显示</h4>
@@ -44,5 +97,12 @@ mBtScan.setOnClickListener(new View.OnClickListener() {
   <h4>  支持只显示打印机的蓝牙</h4>
   <h4> 支持已配对的蓝牙数据</h4>
 
-  
+ <h4> 更新日志 </h4>
+ 
+  <h3> 手机蓝牙状态监听 </h3>
+  <h3> 蓝牙连接状态监听 </h3>
+ 
+ 
+ 
+ 
  <h3>新功能正在完善，如果您有什么建议或者功能请联系我的邮箱1016305858@qq.com </h3> 
