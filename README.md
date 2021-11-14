@@ -97,7 +97,7 @@ mBtScan.setOnClickListener(new View.OnClickListener() {
   <h4>  支持只显示打印机的蓝牙</h4>
   <h4> 支持已配对的蓝牙数据</h4>
 
- <h4> 更新日志 </h4>
+ <h3> 更新日志 </h3>
  
   <h3> 手机蓝牙状态监听 </h3>
   <h3> 蓝牙连接状态监听 </h3>
