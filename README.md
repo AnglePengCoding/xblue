@@ -1,5 +1,3 @@
-
-
 [![](https://jitpack.io/v/AnglePengCoding/xblue.svg)](https://jitpack.io/#AnglePengCoding/xblue)
 
 # xblue 这是一个支持连接蓝牙，wifi库。
@@ -55,7 +53,7 @@ mBtScan.setOnClickListener(new View.OnClickListener() {
                         .openWifi(MainActivity.this)
                         .scanWiFiData(new IWifiTooth() {
                             @Override
-                            public void wifiData(List<ScanResult> addDeviceList) {
+                            public void wifiData(List<ScanResult> addDeviceList) { //wifi数据
                                 wifiAdapter.setNewData(addDeviceList);
                             }
                         }, new IWiFiSupplicantState() {
@@ -130,49 +128,112 @@ mBtScan.setOnClickListener(new View.OnClickListener() {
 <h4>手机蓝牙状态监听 </h4>
 
 ```java 
-.blueToothState(new IBluetState() {
-                            @Override
-                            public void state_off() {
-                                //手机蓝牙关闭
-                            }
 
-                            @Override
-                            public void state_turning_off() {
-                                //手机蓝牙正在关闭
-                            }
+public interface IBluetState {
 
-                            @Override
-                            public void state_on() {
-                                //手机蓝牙开启
-                            }
+    /**
+     * 手机蓝牙关闭
+     */
+    void state_off();
 
-                            @Override
-                            public void state_turning_on() {
-                                //手机蓝牙正在开启
-                            }
-                        })
+    /**
+     * 手机蓝牙正在关闭
+     */
+    void state_turning_off();
+
+    /**
+     * 手机蓝牙开启
+     */
+    void state_on();
+
+    /**
+     * 手机蓝牙正在开启
+     */
+    void state_turning_on();
+}
+
 ```
 
 <h4>蓝牙连接状态监听 </h4>
 
 ```java 
 
-.blueToothPairState(new IBlueToothPairState() {
-                            @Override
-                            public void bond_bonding() {
-                                //正在配对
-                            }
+public interface IBlueToothPairState {
 
-                            @Override
-                            public void bond_bonded() {
-                                //完成配对
-                            }
+    /**
+     * 正在配对
+     */
+    void bond_bonding();
 
-                            @Override
-                            public void bond_none() {
-                                //取消配对
-                            }
-                        })
+    /**
+     * 完成配对
+     */
+    void bond_bonded();
+
+    /**
+     * 取消配对
+     */
+    void bond_none();
+}
+
+
+```
+
+
+<h4>wifi连接状态监听 </h4>
+
+```java 
+  /**
+     * 正在打开 WIFI-WIFI状态发生变化
+     */
+    void wifi_state_enabling();
+
+    /**
+     * WIFI 已打开-WIFI状态发生变化
+     */
+    void wifi_state_enabled();
+
+    /**
+     * WIFI 正在关闭
+     */
+    void wifi_state_disabling();
+
+    /**
+     * WIFI 已关闭
+     */
+    void wifi_state_disabled();
+
+    /**
+     *WIFI 状态未知
+     */
+    void wifi_state_unknown();
+
+    /**
+     * 正在扫描-wifi连接结果通知   WIFI连接请求状态发生改变
+     */
+    void scanning();
+
+
+    /**
+     * 正在验证-wifi连接结果通知   WIFI连接请求状态发生改变
+     */
+    void authenticating();
+
+    /**
+     * 正在关联-wifi连接结果通知   WIFI连接请求状态发生改变
+     */
+    void associating();
+
+    /**
+     * 已经关联-wifi连接结果通知   WIFI连接请求状态发生改变
+     */
+    void associated();
+
+    /**
+     * 完成-wifi连接结果通知   WIFI连接请求状态发生改变
+     */
+    void completed();
+
 
 
 ```
