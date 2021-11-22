@@ -1,4 +1,4 @@
-package com.github.anglepengcoding.xblue;
+package com.github.anglepengcoding.xblue.bluetooth.bluetooth_interface;
 
 import android.bluetooth.BluetoothDevice;
 

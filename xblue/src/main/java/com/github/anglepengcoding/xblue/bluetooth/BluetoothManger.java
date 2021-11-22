@@ -1,4 +1,4 @@
-package com.github.anglepengcoding.xblue;
+package com.github.anglepengcoding.xblue.bluetooth;
 
 import android.Manifest;
 import android.app.Activity;
@@ -17,16 +17,20 @@ import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.github.anglepengcoding.xblue.bluetooth.bluetooth_interface.IBlueTooth;
+import com.github.anglepengcoding.xblue.bluetooth.bluetooth_interface.IBlueToothPairState;
+import com.github.anglepengcoding.xblue.bluetooth.bluetooth_interface.IBluetState;
+import com.github.anglepengcoding.xblue.bluetooth.bluetooth_interface.IHistoryBlueTooth;
 import com.github.anglepengcoding.xblue.utils.BlueUtils;
 import com.github.anglepengcoding.xblue.utils.dialog.CustomProgressDialogUtils;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import static android.bluetooth.BluetoothDevice.ACTION_PAIRING_REQUEST;
 import static android.content.ContentValues.TAG;
+import static com.github.anglepengcoding.xblue.utils.BlueUtils.isBluetoothEnabled;
 
 /**
  * Created by 刘红鹏 on 2021/11/5.
@@ -36,7 +40,6 @@ import static android.content.ContentValues.TAG;
  */
 
 public class BluetoothManger {
-
 
     public Activity activity;
     BluetoothAdapter mBluetoothAdapter;
@@ -56,7 +59,7 @@ public class BluetoothManger {
         mAlertHandler = new Handler(thread.getLooper());
     }
 
-    void scanBlueTooth(int scanMillis) {
+    public void scanBlueTooth(int scanMillis) {
         if (bluetoothEnable()) {
             BlueUtils.openBluetooth(activity.getApplicationContext());
         }
@@ -99,11 +102,12 @@ public class BluetoothManger {
     /**
      * 停止扫描
      */
-    void cancelSearchBluetooth() {
-        if (mBluetoothAdapter != null && mAlertHandler != null) {
-            mAlertHandler.removeCallbacksAndMessages(null);
-            mBluetoothAdapter.cancelDiscovery();
+    public void cancelSearchBluetooth() {
+        if (!isBluetoothEnabled()) {
+            Log.e(TAG, "bluetoothAdapter is not enabled");
+            throw new NullPointerException();
         }
+
     }
 
     /**
@@ -144,6 +148,10 @@ public class BluetoothManger {
     private final BroadcastReceiver bluetoothReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            if (!isBluetoothEnabled()) {
+                Log.e(TAG, "bluetoothAdapter is not enabled");
+                throw new NullPointerException();
+            }
             String action = intent.getAction();
             BluetoothDevice device;
             // 搜索设备时，取得设备的MAC地址
@@ -273,5 +281,6 @@ public class BluetoothManger {
             historyBlueTooth.historyData(historyDeviceList);
         }
     }
+
 
 }

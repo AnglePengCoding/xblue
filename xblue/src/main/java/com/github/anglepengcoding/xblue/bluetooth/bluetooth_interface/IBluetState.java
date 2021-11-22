@@ -1,4 +1,4 @@
-package com.github.anglepengcoding.xblue;
+package com.github.anglepengcoding.xblue.bluetooth.bluetooth_interface;
 
 /**
  * Created by 刘红鹏 on 2021/11/14.
