@@ -1,6 +1,8 @@
+
+
 [![](https://jitpack.io/v/AnglePengCoding/xblue.svg)](https://jitpack.io/#AnglePengCoding/xblue)
 
-# xblue
+# xblue 这是一个支持连接蓝牙，wifi库。
 
 <h3>工程目录添加 </h3>
 
@@ -22,7 +24,7 @@ implementation 'com.github.AnglePengCoding:xblue:1.1'
 <img src="https://github.com/AnglePengCoding/xblue/blob/main/app/device-2021-11-08-162859.png" width="150px">
 <img src="https://github.com/AnglePengCoding/xblue/blob/main/app/device-2021-11-08-162927.png" width="150px">
 
-<h4> 使用 </h4>
+<h4> 连接蓝牙使用 </h4>
 
 ```java 
 mBtScan.setOnClickListener(new View.OnClickListener() {
@@ -41,20 +43,72 @@ mBtScan.setOnClickListener(new View.OnClickListener() {
                         });
 ```
 
-<h4> 优雅使用 </h4>
+<h4> 连接wifi使用 </h4>
 
 ```java 
-                        new XBluetooth
-                        .Builder(MainActivity.this)
-                        .scanBlueTooth(true, 5000) //开启扫描 停止时间
-                        .scanIsPrint(true)//true 显示打印机的蓝牙 false显示全部数据
-                        .cancel()//取消扫描
-                        .scanCallBack(new IBlueTooth() {//搜索到蓝牙设备
+                            mBtScan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new XBluetooth.Builder()
+                        .openWifi(MainActivity.this)
+                        .scanWiFiData(new IWifiTooth() {
                             @Override
-                            public void blueData(List<BluetoothDevice> addDeviceList) {
-                                adapter.setNewData(addDeviceList);
+                            public void wifiData(List<ScanResult> addDeviceList) {
+                                wifiAdapter.setNewData(addDeviceList);
+                            }
+                        }, new IWiFiSupplicantState() {
+                            @Override
+                            public void wifi_state_enabling() {
+                                Log.e("Yuang", "wifi_state_enabling: 正在打开 WIFI-WIFI状态发生变化");
+                            }
+
+                            @Override
+                            public void wifi_state_enabled() {
+                                Log.e("Yuang", "wifi_state_enabled:  WIFI 已打开-WIFI状态发生变化");
+                            }
+
+                            @Override
+                            public void wifi_state_disabling() {
+                                Log.e("Yuang", "wifi_state_disabling: WIFI 正在关闭");
+                            }
+
+                            @Override
+                            public void wifi_state_disabled() {
+                                Log.e("Yuang", "wifi_state_disabled:  WIFI 已关闭");
+                            }
+
+                            @Override
+                            public void wifi_state_unknown() {
+                                Log.e("Yuang", "wifi_state_unknown: WIFI 状态未知");
+                            }
+
+                            @Override
+                            public void scanning() {
+                                Log.e("Yuang", "scanning: 正在扫描-wifi连接结果通知   WIFI连接请求状态发生改变");
+                            }
+
+                            @Override
+                            public void authenticating() {
+                                Log.e("Yuang", "authenticating: 正在验证-wifi连接结果通知   WIFI连接请求状态发生改变");
+                            }
+
+                            @Override
+                            public void associating() {
+                                Log.e("Yuang", "associating: 正在关联-wifi连接结果通知   WIFI连接请求状态发生改变");
+                            }
+
+                            @Override
+                            public void associated() {
+                                Log.e("Yuang", "associated: 已经关联-wifi连接结果通知   WIFI连接请求状态发生改变");
+                            }
+
+                            @Override
+                            public void completed() {
+                                Log.e("Yuang", "completed: 完成-wifi连接结果通知   WIFI连接请求状态发生改变");
                             }
                         });
+            }
+        });
 
 ```
 
@@ -127,11 +181,8 @@ mBtScan.setOnClickListener(new View.OnClickListener() {
   <h4>  支持一键搜索</h4>
   <h4>  支持只显示打印机的蓝牙</h4>
   <h4> 支持已配对的蓝牙数据</h4>
-
-  <h3> 更新日志 </h3>
- 
-  <h4> 手机蓝牙状态监听 </h4>
-  <h4> 蓝牙连接状态监听 </h4>
+  <h4> 支持连接wifi</h4>
+  <h4> 支持wifi状态回调显示</h4>
  
  
  
