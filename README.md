@@ -21,7 +21,7 @@ implementation 'com.github.AnglePengCoding:xblue:1.1'
 
 <h4>效果图</h4>
 
-<img src="https://github.com/AnglePengCoding/xblue/blob/main/app/device-2021-11-08-162859.png" width="150px">
+<img src="https://github.com/AnglePengCoding/xblue/blob/main/app/wifi.png" width="150px">
 <img src="https://github.com/AnglePengCoding/xblue/blob/main/app/device-2021-11-08-162927.png" width="150px">
 
 <h4> 连接蓝牙使用 </h4>
