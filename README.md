@@ -1,6 +1,6 @@
 [![](https://jitpack.io/v/AnglePengCoding/xblue.svg)](https://jitpack.io/#AnglePengCoding/xblue)
 
-# xblue
+# xblue 这是一个支持连接蓝牙，wifi库。
 
 <h3>工程目录添加 </h3>
 
