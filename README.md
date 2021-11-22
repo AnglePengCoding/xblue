@@ -15,7 +15,9 @@ maven { url 'https://jitpack.io' }
 <h3>build添加 </h3>
 
 ```java  
-implementation 'com.github.AnglePengCoding:xblue:1.1'
+implementation 'com.github.AnglePengCoding:xblue:1.1' //蓝牙
+
+implementation 'com.github.AnglePengCoding:xblue:1.2' //支持连接wifi
 
 ```
 
