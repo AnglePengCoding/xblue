@@ -2,9 +2,9 @@ package com.github.anglepengcoding.myapplication;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.Dialog;
 import android.bluetooth.BluetoothDevice;
 import android.content.pm.PackageManager;
+import android.hardware.usb.UsbDevice;
 import android.net.wifi.ScanResult;
 import android.os.Build;
 import android.os.Handler;
@@ -21,11 +21,14 @@ import android.widget.Button;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.github.anglepengcoding.xblue.XBluetooth;
 import com.github.anglepengcoding.xblue.bluetooth.bluetooth_interface.IBlueTooth;
 import com.github.anglepengcoding.xblue.bluetooth.bluetooth_interface.IBlueToothPairState;
 import com.github.anglepengcoding.xblue.bluetooth.bluetooth_interface.IBluetState;
 import com.github.anglepengcoding.xblue.bluetooth.bluetooth_interface.IHistoryBlueTooth;
-import com.github.anglepengcoding.xblue.XBluetooth;
+import com.github.anglepengcoding.xblue.usb.IAppointUsbData;
+import com.github.anglepengcoding.xblue.usb.IUsbTooth;
+import com.github.anglepengcoding.xblue.usb.UsbManger;
 import com.github.anglepengcoding.xblue.wifi.IWiFiSupplicantState;
 import com.github.anglepengcoding.xblue.wifi.IWifiTooth;
 
@@ -43,27 +46,99 @@ public class MainActivity extends Activity {
 
     private RecyclerView mRecyclerView;
     private Button mBtScan, mBtWrite;
-    private BaseQuickAdapter<BluetoothDevice, BaseViewHolder> adapter;
-    private String[] permissions = new String[]{
-            ACCESS_FINE_LOCATION, BLUETOOTH_ADMIN,
-            BLUETOOTH, ACCESS_COARSE_LOCATION, STORAGE, INTERNET};
+
+
     private int requestcode = 0x33;
+    private String[] permissions = new String[]{ACCESS_FINE_LOCATION, BLUETOOTH_ADMIN, BLUETOOTH, ACCESS_COARSE_LOCATION, STORAGE, INTERNET};
+
+
     private BaseQuickAdapter<ScanResult, BaseViewHolder> wifiAdapter;
+    private BaseQuickAdapter<UsbDevice, BaseViewHolder> usbAdapter;
+    private BaseQuickAdapter<BluetoothDevice, BaseViewHolder> adapter;
+
+    private XBluetooth.Builder usbBuilder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initUi();
+        initClickListener();
+        initBluetoothAdapter();//蓝牙
+        initWifiAdapter();//wifi
+        initUsbAdapter();//串口
+    }
+
+    private void initUi() {
         setContentView(R.layout.activity_main);
         mRecyclerView = findViewById(R.id.mRecyclerView);
         mBtScan = findViewById(R.id.mBtScan);
         mBtWrite = findViewById(R.id.mBtWrite);
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPermissions(permissions, requestcode);
         }
-        initAdapter();
-        initWifiAdapter();
-//
+    }
+
+    private void initClickListener() {
+        //扫描蓝牙
+        mBtScan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new XBluetooth
+                        .Builder(MainActivity.this)
+                        .scanBlueTooth(true, 5000) //开启扫描 停止时间
+                        .scanIsPrint(false)//true 显示打印机的蓝牙 false显示全部数据
+                        .cancel()//取消扫描
+                        .scanCallBack(new IBlueTooth() {//搜索到蓝牙设备
+                            @Override
+                            public void blueData(List<BluetoothDevice> addDeviceList) {
+                                adapter.setNewData(addDeviceList);
+                            }
+                        }).scanHistoryCallBack(new IHistoryBlueTooth() {//历史配过的蓝牙
+                    @Override
+                    public void historyData(List<BluetoothDevice> historyDeviceList) {
+
+                    }
+                }).blueToothState(new IBluetState() {
+                    @Override
+                    public void state_off() {
+                        //手机蓝牙关闭
+                    }
+
+                    @Override
+                    public void state_turning_off() {
+                        //手机蓝牙正在关闭
+                    }
+
+                    @Override
+                    public void state_on() {
+                        //手机蓝牙开启
+                    }
+
+                    @Override
+                    public void state_turning_on() {
+                        //手机蓝牙正在开启
+                    }
+                }).blueToothPairState(new IBlueToothPairState() {
+                    @Override
+                    public void bond_bonding() {
+                        //正在配对
+                    }
+
+                    @Override
+                    public void bond_bonded() {
+                        //完成配对
+                    }
+
+                    @Override
+                    public void bond_none() {
+                        //取消配对
+                    }
+                });
+            }
+        });
+
+
+        //扫描wifi
         mBtScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,65 +203,52 @@ public class MainActivity extends Activity {
             }
         });
 
+        //扫描usb
+        mBtScan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                usbBuilder = new XBluetooth
+                        .Builder()
+                        .openUsb(MainActivity.this)
+                        .scanUsb(new IUsbTooth() {
+                            @Override
+                            public void scanUsbData(List<UsbDevice> usbDevices) {//扫描全部串口数据
+                                usbAdapter.setNewData(usbDevices);
+                            }
+                        })
+                        .appointScanUsb(1, 0, new IAppointUsbData() {//指定扫描串口数据
+                            @Override
+                            public void scanUsbData(UsbDevice device) {
+                            }
+                        });
 
-//        mBtScan.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                builder = new XBluetooth
-//                        .Builder(MainActivity.this)
-//                        .scanBlueTooth(true, 5000) //开启扫描 停止时间
-//                        .scanIsPrint(false)//true 显示打印机的蓝牙 false显示全部数据
-//                        .cancel()//取消扫描
-//                        .scanCallBack(new IBlueTooth() {//搜索到蓝牙设备
-//                            @Override
-//                            public void blueData(List<BluetoothDevice> addDeviceList) {
-//                                adapter.setNewData(addDeviceList);
-//                            }
-//                        }).scanHistoryCallBack(new IHistoryBlueTooth() {//历史配过的蓝牙
-//                            @Override
-//                            public void historyData(List<BluetoothDevice> historyDeviceList) {
-//
-//                            }
-//                        }).blueToothState(new IBluetState() {
-//                            @Override
-//                            public void state_off() {
-//                                //手机蓝牙关闭
-//                            }
-//
-//                            @Override
-//                            public void state_turning_off() {
-//                                //手机蓝牙正在关闭
-//                            }
-//
-//                            @Override
-//                            public void state_on() {
-//                                //手机蓝牙开启
-//                            }
-//
-//                            @Override
-//                            public void state_turning_on() {
-//                                //手机蓝牙正在开启
-//                            }
-//                        }).blueToothPairState(new IBlueToothPairState() {
-//                            @Override
-//                            public void bond_bonding() {
-//                                //正在配对
-//                            }
-//
-//                            @Override
-//                            public void bond_bonded() {
-//                                //完成配对
-//                            }
-//
-//                            @Override
-//                            public void bond_none() {
-//                                //取消配对
-//                            }
-//                        });
-//            }
-//        });
+            }
+        });
 
 
+    }
+
+    private void initUsbAdapter() {
+        usbAdapter = new BaseQuickAdapter<UsbDevice, BaseViewHolder>(R.layout.activity_blue_tooth_device) {
+            @Override
+            protected void convert(BaseViewHolder helper, final UsbDevice item) {
+                helper.setText(R.id.mTvName, item.getDeviceName());//usb名字
+                helper.setText(R.id.mTvAddress, item.getVendorId());
+
+                helper.getView(R.id.list_item).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //请求usb权限
+                        usbBuilder.requestPermission(item);
+                    }
+                });
+
+            }
+        };
+
+
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        mRecyclerView.setAdapter(usbAdapter);
     }
 
     private void initWifiAdapter() {
@@ -206,12 +268,12 @@ public class MainActivity extends Activity {
         super.onDestroy();
     }
 
-    private void initAdapter() {
+    private void initBluetoothAdapter() {
         adapter = new BaseQuickAdapter<BluetoothDevice, BaseViewHolder>(R.layout.activity_blue_tooth_device) {
             @Override
             protected void convert(BaseViewHolder helper, BluetoothDevice item) {
-                helper.setText(R.id.mTvName, item.getName());
-                helper.setText(R.id.mTvAddress, item.getAddress());
+                helper.setText(R.id.mTvName, item.getName());//蓝牙名字
+                helper.setText(R.id.mTvAddress, item.getAddress());//蓝牙地址
             }
         };
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));

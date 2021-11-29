@@ -2,12 +2,17 @@ package com.github.anglepengcoding.xblue;
 
 import android.app.Activity;
 import android.content.Context;
+import android.hardware.usb.UsbDevice;
+import android.support.annotation.NonNull;
 
 import com.github.anglepengcoding.xblue.bluetooth.BluetoothManger;
 import com.github.anglepengcoding.xblue.bluetooth.bluetooth_interface.IBlueTooth;
 import com.github.anglepengcoding.xblue.bluetooth.bluetooth_interface.IBlueToothPairState;
 import com.github.anglepengcoding.xblue.bluetooth.bluetooth_interface.IBluetState;
 import com.github.anglepengcoding.xblue.bluetooth.bluetooth_interface.IHistoryBlueTooth;
+import com.github.anglepengcoding.xblue.usb.IAppointUsbData;
+import com.github.anglepengcoding.xblue.usb.IUsbTooth;
+import com.github.anglepengcoding.xblue.usb.UsbManger;
 import com.github.anglepengcoding.xblue.utils.BlueUtils;
 import com.github.anglepengcoding.xblue.wifi.IWiFiSupplicantState;
 import com.github.anglepengcoding.xblue.wifi.IWifiTooth;
@@ -24,7 +29,7 @@ public class XBluetooth {
     public static class Builder {
 
         private final BluetoothManger bluetoothManger = new BluetoothManger();
-
+        private final UsbManger usbManger = new UsbManger();
         private final WiFiManger wiFiManger = new WiFiManger();
 
         public Builder() {
@@ -154,11 +159,60 @@ public class XBluetooth {
 
         /**
          * 扫描的wifi结果
+         *
          * @param wifiTooth
          * @return
          */
-        public Builder scanWiFiData(IWifiTooth wifiTooth,IWiFiSupplicantState wiFiSupplicantState) {
-            this.wiFiManger.scanWiFiData(wifiTooth,wiFiSupplicantState);
+        public Builder scanWiFiData(IWifiTooth wifiTooth, IWiFiSupplicantState wiFiSupplicantState) {
+            this.wiFiManger.scanWiFiData(wifiTooth, wiFiSupplicantState);
+            return this;
+        }
+
+        /**
+         * 打开usb
+         */
+        public Builder openUsb(Activity activity) {
+            this.usbManger.mActivity = activity;
+            return this;
+        }
+
+
+        /**
+         * @param usbData 数据
+         * @return
+         */
+        public Builder scanUsb(IUsbTooth usbData) {
+            this.usbManger.scanUsb(usbData);
+            return this;
+        }
+
+        /**
+         * @param vendorId       厂商ID
+         * @param productId      产品ID
+         * @param appointUsbData usb 数据
+         * @return
+         */
+        public Builder appointScanUsb(int vendorId, int productId, IAppointUsbData appointUsbData) {
+            this.usbManger.appointScanUsb(vendorId, productId, appointUsbData);
+            return this;
+        }
+
+
+        /**
+         * 请求USB权限
+         * @param device
+         * @return
+         */
+        public Builder  requestPermission(@NonNull UsbDevice device) {
+            this.usbManger.requestPermission(device);
+            return this;
+        }
+
+        /**
+         * 关闭usb
+         */
+        public Builder closeUsb() {
+            this.usbManger.closeUsb();
             return this;
         }
 
