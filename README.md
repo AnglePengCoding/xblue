@@ -1,6 +1,6 @@
 [![](https://jitpack.io/v/AnglePengCoding/xblue.svg)](https://jitpack.io/#AnglePengCoding/xblue)
 
-# xblue 这是一个支持扫描蓝牙，wifi，usb库。
+<img src="https://m.baidu.com/sf/vsearch?pd=image_content&word=blue&tn=vsearch&atn=mediacy&fr=tab&sa=vs_tab&imgtype=0&imgcontent=%7B%22materialQuery%22%3A%22%22%2C%22subjectJson%22%3A%7B%7D%7D&imgpn=1&imgspn=undefined&mediacyKey=undefined&tt=1&di=96690&pi=0&cs=880386096%2C1373294361&bdtype=0&objurl=https%3A%2F%2Fgimg2.baidu.com%2Fimage_search%2Fsrc%3Dhttp%253A%252F%252Fimg.zcool.cn%252Fcommunity%252F012ae85a911007a801219231ae4e1e.jpg%25402o.jpg%26refer%3Dhttp%253A%252F%252Fimg.zcool.cn%26app%3D2002%26size%3Df9999%2C10000%26q%3Da80%26n%3D0%26g%3D0n%26fmt%3Djpeg%3Fsec%3D1640787590%26t%3D64e768f60ba66fc55fc755632fe973d9&imgos=3830567030%2C3828299585&imgis=0%2C0&isRecFrClick=0 width="150px">
 
 <h3> Step 1.  Add it in your root build.gradle at the end of repositories: </h3>
 
