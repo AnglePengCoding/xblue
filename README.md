@@ -2,20 +2,20 @@
 
 # xblue 这是一个支持扫描蓝牙，wifi，usb库。
 
-<h3>工程目录添加 </h3>
+<h3> Step 1.  Add it in your root build.gradle at the end of repositories: </h3>
 
 ```java  
+
 maven { url 'https://jitpack.io' } 
 
 ```
 
 
-<h3>build添加 </h3>
+<h3> Step 2. Add the dependency </h3>
 
 ```java  
-implementation 'com.github.AnglePengCoding:xblue:1.1' //蓝牙
 
-implementation 'com.github.AnglePengCoding:xblue:1.2' //既支持蓝牙,支持连接wifi
+implementation 'com.github.AnglePengCoding:xblue:1.3'
 
 ```
 
