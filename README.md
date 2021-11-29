@@ -1,6 +1,6 @@
 [![](https://jitpack.io/v/AnglePengCoding/xblue.svg)](https://jitpack.io/#AnglePengCoding/xblue)
 
-# xblue 这是一个支持连接蓝牙，wifi库。
+# xblue 这是一个支持扫描蓝牙，wifi，usb库。
 
 <h3>工程目录添加 </h3>
 
@@ -24,7 +24,7 @@ implementation 'com.github.AnglePengCoding:xblue:1.2' //既支持蓝牙,支持�
 <img src="https://github.com/AnglePengCoding/xblue/blob/main/app/wifi.png" width="150px">
 <img src="https://github.com/AnglePengCoding/xblue/blob/main/app/device-2021-11-08-162927.png" width="150px">
 
-<h4> 连接蓝牙使用 </h4>
+<h4> 蓝牙扫描使用 </h4>
 
 ```java 
 mBtScan.setOnClickListener(new View.OnClickListener() {
@@ -43,7 +43,7 @@ mBtScan.setOnClickListener(new View.OnClickListener() {
                         });
 ```
 
-<h4> 连接wifi使用 </h4>
+<h4> wifi扫描使用 </h4>
 
 ```java 
                             mBtScan.setOnClickListener(new View.OnClickListener() {
@@ -111,7 +111,32 @@ mBtScan.setOnClickListener(new View.OnClickListener() {
         });
 
 ```
+<h4> usb扫描使用 </h4>
 
+```java 
+
+    mBtScan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                usbBuilder = new XBluetooth
+                        .Builder()
+                        .openUsb(MainActivity.this)
+                        .scanUsb(new IUsbTooth() {
+                            @Override
+                            public void scanUsbData(List<UsbDevice> usbDevices) {//扫描全部串口数据
+                                usbAdapter.setNewData(usbDevices);
+                            }
+                        })
+                        .appointScanUsb(1, 0, new IAppointUsbData() {//指定扫描串口数据
+                            @Override
+                            public void scanUsbData(UsbDevice device) {
+                            }
+                        });
+
+            }
+        });
+
+```
 
 <h4> 历史配对过的蓝牙 </h4>
 
@@ -235,6 +260,20 @@ public interface IBlueToothPairState {
     void completed();
 
 
+
+```
+
+<h4> 请求usb权限 </h4>
+
+```java 
+
+   helper.getView(R.id.list_item).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //请求usb权限
+                        usbBuilder.requestPermission(item);
+                    }
+                });
 
 ```
 
