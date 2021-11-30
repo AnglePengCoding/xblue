@@ -1,6 +1,12 @@
 [![](https://jitpack.io/v/AnglePengCoding/xblue.svg)](https://jitpack.io/#AnglePengCoding/xblue)
 
 
+<img src="https://github.com/AnglePengCoding/xblue/blob/main/app/log.png" >
+
+
+
+
+
 <h3> Step 1.  Add it in your root build.gradle at the end of repositories: </h3>
 
 ```java  
@@ -19,8 +25,6 @@ implementation 'com.github.AnglePengCoding:xblue:1.3'
 ```
 
 <h4>效果图</h4>
-
-<img src="https://github.com/AnglePengCoding/xblue/blob/main/app/wifi.png" width="150px">
 <img src="https://github.com/AnglePengCoding/xblue/blob/main/app/device-2021-11-08-162927.png" width="150px">
 
 <h4> 蓝牙扫描使用 </h4>
