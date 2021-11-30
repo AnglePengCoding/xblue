@@ -4,10 +4,6 @@
 <img src="https://github.com/AnglePengCoding/xblue/blob/main/app/log.png" >
 
 
-
-<h4> Demo 扫描二维码下载 </h4>
-<img src="https://github.com/AnglePengCoding/xblue/blob/main/app/xz.png" >
-
 <h3> Step 1.  Add it in your root build.gradle at the end of repositories: </h3>
 
 ```java  
@@ -279,6 +275,14 @@ public interface IBlueToothPairState {
                 });
 
 ```
+
+
+<h4> Apk 扫描二维码下载 </h4>
+<img src="https://github.com/AnglePengCoding/xblue/blob/main/app/xz.png" >
+
+
+  <h3>  百忙之中，给个star</h3>
+
 
   <h3>  功能支持 </h3>
   
