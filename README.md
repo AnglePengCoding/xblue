@@ -5,7 +5,7 @@
 
 
 
-<h4> Demo 下载地址 </h4>
+<h4> Demo 扫描二维码下载 </h4>
 <img src="https://github.com/AnglePengCoding/xblue/blob/main/app/xz.png" >
 
 <h3> Step 1.  Add it in your root build.gradle at the end of repositories: </h3>
