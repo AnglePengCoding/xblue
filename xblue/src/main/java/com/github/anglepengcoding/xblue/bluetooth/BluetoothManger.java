@@ -22,7 +22,6 @@ import com.github.anglepengcoding.xblue.bluetooth.bluetooth_interface.IBlueTooth
 import com.github.anglepengcoding.xblue.bluetooth.bluetooth_interface.IBluetState;
 import com.github.anglepengcoding.xblue.bluetooth.bluetooth_interface.IHistoryBlueTooth;
 import com.github.anglepengcoding.xblue.utils.BlueUtils;
-import com.github.anglepengcoding.xblue.utils.dialog.CustomProgressDialogUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,13 +79,16 @@ public class BluetoothManger {
         if (isScanning()) {
             cancelSearchBluetooth();
         }
-        CustomProgressDialogUtils.getInstance().showProgress(activity, "蓝牙搜索中");
 
         addDeviceList = new ArrayList<>();
         historyDeviceList = new ArrayList<>();
 
         initBluetoothReceiver(activity);
-        mBluetoothAdapter.startDiscovery();
+        try {
+            mBluetoothAdapter.startDiscovery();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         mAlertHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -116,7 +118,12 @@ public class BluetoothManger {
      * @return true
      */
     private boolean isScanning() {
-        return mBluetoothAdapter.isDiscovering();
+        try {
+            return mBluetoothAdapter.isDiscovering();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return false;
     }
 
 
@@ -188,7 +195,6 @@ public class BluetoothManger {
                 Log.e(TAG, " BluetoothDevice ACTION_DISCOVERY_STARTED");
 
             } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
-                CustomProgressDialogUtils.getInstance().dismissProgress();
                 Log.e(TAG, " BluetoothDevice ACTION_DISCOVERY_FINISHED");
             } else if (BluetoothDevice.ACTION_BOND_STATE_CHANGED.equals(action)) {
                 Log.e(TAG, " BluetoothDevice ACTION_BOND_STATE_CHANGED");
