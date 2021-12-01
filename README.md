@@ -1,7 +1,11 @@
 [![](https://jitpack.io/v/AnglePengCoding/xblue.svg)](https://jitpack.io/#AnglePengCoding/xblue)
 
+<h2>介绍</h2>
 
+<h3>xblue是一款支持 usb wifi 蓝牙扫描库 支持Androidx，Anroid版本 </h3>
+            
 <img src="https://github.com/AnglePengCoding/xblue/blob/main/app/log.png" >
+
 
 <h4> Apk 扫描二维码下载 </h4>
 <img src="https://github.com/AnglePengCoding/xblue/blob/main/app/xz.png" >
