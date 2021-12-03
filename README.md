@@ -21,7 +21,7 @@ maven { url 'https://jitpack.io' }
 
 ```java  
 
-implementation 'com.github.AnglePengCoding:xblue:1.3'
+implementation 'com.github.AnglePengCoding:xblue:1.4'
 
 ```
 
