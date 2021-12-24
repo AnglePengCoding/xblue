@@ -149,8 +149,15 @@ public class BluetoothManger {
     }
 
     public void unregisterReceiver(Activity activity) {
-        activity.unregisterReceiver(bluetoothReceiver);
+        try {
+            if (bluetoothReceiver!=null){
+                activity.unregisterReceiver(bluetoothReceiver);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
+
 
     private final BroadcastReceiver bluetoothReceiver = new BroadcastReceiver() {
         @Override
