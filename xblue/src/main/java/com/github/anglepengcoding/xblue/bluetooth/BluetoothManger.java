@@ -21,6 +21,7 @@ import android.util.Log;
 
 import com.github.anglepengcoding.xblue.bluetooth.bluetooth_interface.IBlueTooth;
 import com.github.anglepengcoding.xblue.bluetooth.bluetooth_interface.IBlueToothPairState;
+import com.github.anglepengcoding.xblue.bluetooth.bluetooth_interface.IBlueToothScanState;
 import com.github.anglepengcoding.xblue.bluetooth.bluetooth_interface.IBluetState;
 import com.github.anglepengcoding.xblue.bluetooth.bluetooth_interface.IHistoryBlueTooth;
 import com.github.anglepengcoding.xblue.utils.BlueUtils;
@@ -54,7 +55,7 @@ public class BluetoothManger {
     public String address;
     public IBluetState bluetState;
     public IBlueToothPairState blueToothPairState;
-
+    public IBlueToothScanState scanState;
     public BluetoothManger() {
     }
 
@@ -217,8 +218,13 @@ public class BluetoothManger {
                 }
             } else if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
                 Log.e(TAG, " BluetoothDevice ACTION_DISCOVERY_STARTED");
-
+                if (scanState!=null){
+                    scanState.started();
+                }
             } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+                if (scanState!=null){
+                    scanState.finished();
+                }
                 Log.e(TAG, " BluetoothDevice ACTION_DISCOVERY_FINISHED");
             } else if (BluetoothDevice.ACTION_BOND_STATE_CHANGED.equals(action)) {
                 Log.e(TAG, " BluetoothDevice ACTION_BOND_STATE_CHANGED");
@@ -313,4 +319,14 @@ public class BluetoothManger {
     }
 
 
+    public void startDiscovery(boolean printBoolean) {
+        this.printBoolean = printBoolean;
+        if (mBluetoothAdapter == null) {
+            return;
+        }
+        if (!mBluetoothAdapter.isDiscovering()) {
+            //判断蓝牙是否正在扫描，如果是调用取消扫描方法；如果不是，则开始扫描
+            mBluetoothAdapter.startDiscovery();
+        }
+    }
 }

@@ -6,12 +6,15 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.github.anglepengcoding.xblue.XBluetooth;
 import com.github.anglepengcoding.xblue.bluetooth.bluetooth_interface.IBlueTooth;
 import com.github.anglepengcoding.xblue.bluetooth.bluetooth_interface.IBlueToothPairState;
+import com.github.anglepengcoding.xblue.bluetooth.bluetooth_interface.IBlueToothScanState;
 import com.github.anglepengcoding.xblue.bluetooth.bluetooth_interface.IBluetState;
 import com.github.anglepengcoding.xblue.bluetooth.bluetooth_interface.IHistoryBlueTooth;
 
@@ -48,40 +51,15 @@ public class BlueActivity extends Activity {
                     public void historyData(List<BluetoothDevice> historyDeviceList) {
 
                     }
-                }).blueToothState(new IBluetState() {
+                }).blueToothScanState(new IBlueToothScanState() {
                     @Override
-                    public void state_off() {
-                        //手机蓝牙关闭
+                    public void started() {
+                        Log.e("IBlueToothScanState","started");
                     }
 
                     @Override
-                    public void state_turning_off() {
-                        //手机蓝牙正在关闭
-                    }
-
-                    @Override
-                    public void state_on() {
-                        //手机蓝牙开启
-                    }
-
-                    @Override
-                    public void state_turning_on() {
-                        //手机蓝牙正在开启
-                    }
-                }).blueToothPairState(new IBlueToothPairState() {
-                    @Override
-                    public void bond_bonding() {
-                        //正在配对
-                    }
-
-                    @Override
-                    public void bond_bonded() {
-                        //完成配对
-                    }
-
-                    @Override
-                    public void bond_none() {
-                        //取消配对
+                    public void finished() {
+                        Log.e("IBlueToothScanState","finished");
                     }
                 });
 
@@ -96,6 +74,13 @@ public class BlueActivity extends Activity {
             protected void convert(BaseViewHolder helper, BluetoothDevice item) {
                 helper.setText(R.id.mTvName, item.getName());//蓝牙名字
                 helper.setText(R.id.mTvAddress, item.getAddress());//蓝牙地址
+
+                helper.getView(R.id.mTvName).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        builder.startDiscovery(true);
+                    }
+                });
             }
         };
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));

@@ -1,14 +1,13 @@
 package com.github.anglepengcoding.xblue;
 
-import android.app.Activity;
 import android.content.Context;
 import android.hardware.usb.UsbDevice;
-import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.github.anglepengcoding.xblue.bluetooth.BluetoothManger;
 import com.github.anglepengcoding.xblue.bluetooth.bluetooth_interface.IBlueTooth;
 import com.github.anglepengcoding.xblue.bluetooth.bluetooth_interface.IBlueToothPairState;
+import com.github.anglepengcoding.xblue.bluetooth.bluetooth_interface.IBlueToothScanState;
 import com.github.anglepengcoding.xblue.bluetooth.bluetooth_interface.IBluetState;
 import com.github.anglepengcoding.xblue.bluetooth.bluetooth_interface.IHistoryBlueTooth;
 import com.github.anglepengcoding.xblue.usb.IAppointUsbData;
@@ -35,17 +34,18 @@ public class XBluetooth {
         private final UsbManger usbManger = new UsbManger();
         private final WiFiManger wiFiManger = new WiFiManger();
         private Context mContext;
+        private boolean printBoolean;
 
         public Builder(Context context) {
-            this. mContext= context;
+            this.mContext = context;
         }
 
         public Builder scanBlueTooth(int scanMillis) {
-            if (mContext==null){
-                Log.e(TAG, "scanBlueTooth: 请先初始化Builder构造方法" );
+            if (mContext == null) {
+                Log.e(TAG, "scanBlueTooth: 请先初始化Builder构造方法");
                 return this;
             }
-            bluetoothManger.scanBlueTooth(scanMillis,mContext);
+            bluetoothManger.scanBlueTooth(scanMillis, mContext);
             return this;
         }
 
@@ -59,6 +59,15 @@ public class XBluetooth {
             return this;
         }
 
+        /**
+         * 重新开启扫描类似旋转重新开始扫描
+         *
+         * @return
+         */
+        public Builder startDiscovery(boolean printBoolean) {
+            this.bluetoothManger.startDiscovery(printBoolean);
+            return this;
+        }
 
         /**
          * 扫描得到的结果
@@ -138,11 +147,21 @@ public class XBluetooth {
         }
 
         /**
+         * @param scanState 蓝牙扫描状态 开始 or 结束
+         * @return
+         */
+        public Builder blueToothScanState(IBlueToothScanState scanState) {
+            this.bluetoothManger.scanState = scanState;
+            return this;
+        }
+
+
+        /**
          * 打开wifi
          */
         public Builder openWifi() {
-            if (mContext==null){
-                Log.e(TAG, "scanBlueTooth: 请先初始化Builder构造方法" );
+            if (mContext == null) {
+                Log.e(TAG, "scanBlueTooth: 请先初始化Builder构造方法");
                 return this;
             }
             this.wiFiManger.openWifi(mContext);
@@ -175,11 +194,11 @@ public class XBluetooth {
          * @return
          */
         public Builder scanUsb(IUsbTooth usbData) {
-            if (mContext==null){
-                Log.e(TAG, "scanBlueTooth: 请先初始化Builder构造方法" );
+            if (mContext == null) {
+                Log.e(TAG, "scanBlueTooth: 请先初始化Builder构造方法");
                 return this;
             }
-            this.usbManger.scanUsb(usbData,mContext);
+            this.usbManger.scanUsb(usbData, mContext);
             return this;
         }
 
@@ -201,7 +220,7 @@ public class XBluetooth {
          * @param device
          * @return
          */
-        public Builder requestPermission(@NonNull UsbDevice device) {
+        public Builder requestPermission(UsbDevice device) {
             this.usbManger.requestPermission(device);
             return this;
         }
