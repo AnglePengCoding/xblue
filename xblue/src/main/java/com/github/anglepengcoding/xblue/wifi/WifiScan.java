@@ -23,29 +23,37 @@ import static android.content.ContentValues.TAG;
 public class WifiScan implements WifiClient {
 
     private WifiManager mWifiManager;
-    private Activity activity;
+    private Context mContext;
     private IWifiTooth wifiTooth;
     private IWiFiSupplicantState wiFiSupplicantState;
+    private NetworkBroadcastReceiver networkBroadcastReceiver;
+
 
     @Override
-    public void openWifi(Activity activity) {
-        this.activity = activity;
+    public void openWifi(Context context) {
+        this.mContext = context;
         if (!mWifiManager.isWifiEnabled()) {
             mWifiManager.setWifiEnabled(true);
         }
+        mWifiManager.startScan();
     }
+
 
     @Override
     public void closeWifi() {
-        if (mWifiManager.isWifiEnabled()) {
-            mWifiManager.setWifiEnabled(false);
-            activity.unregisterReceiver(new NetworkBroadcastReceiver());
-            if (wifiTooth != null) {
-                wifiTooth = null;
+        try {
+            if (mWifiManager.isWifiEnabled()) {
+                mWifiManager.setWifiEnabled(false);
+                mContext.unregisterReceiver(networkBroadcastReceiver);
+                if (wifiTooth != null) {
+                    wifiTooth = null;
+                }
+                if (wiFiSupplicantState != null) {
+                    wiFiSupplicantState = null;
+                }
             }
-            if (wiFiSupplicantState != null) {
-                wiFiSupplicantState = null;
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -70,18 +78,14 @@ public class WifiScan implements WifiClient {
     private void registerReceivers(IWifiTooth wifiTooth, IWiFiSupplicantState wiFiSupplicantState) {
         try {
             IntentFilter filter = new IntentFilter();
-            if (Build.VERSION.SDK_INT >= 28) {
-                filter.addAction(LocationManager.PROVIDERS_CHANGED_ACTION);
-            }
-            // Android 8.0之后对静态注册的广播增加限制,保护用户隐私,故推荐使用动态注册
-            // WifiStateBroadcast 继承自 BroadcastReceiver
+            filter.addAction(LocationManager.PROVIDERS_CHANGED_ACTION);
             filter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
             filter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
             filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
             filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
-            activity.registerReceiver(new NetworkBroadcastReceiver(wifiTooth, wiFiSupplicantState), filter);
-        } catch (NullPointerException n) {
-            Log.e(TAG, "context: null");
+            networkBroadcastReceiver = new NetworkBroadcastReceiver(wifiTooth, wiFiSupplicantState);
+            mContext.registerReceiver(networkBroadcastReceiver, filter);
+        } catch (Exception n) {
             n.printStackTrace();
         }
     }
@@ -89,12 +93,9 @@ public class WifiScan implements WifiClient {
     /**
      * 广播接收者
      */
-    public static class NetworkBroadcastReceiver extends BroadcastReceiver {
+    public class NetworkBroadcastReceiver extends BroadcastReceiver {
         private IWifiTooth wifiTooth;
         private IWiFiSupplicantState wiFiSupplicantState;
-
-        public NetworkBroadcastReceiver() {
-        }
 
         public NetworkBroadcastReceiver(IWifiTooth wifiTooth, IWiFiSupplicantState wiFiSupplicantState) {
             this.wifiTooth = wifiTooth;

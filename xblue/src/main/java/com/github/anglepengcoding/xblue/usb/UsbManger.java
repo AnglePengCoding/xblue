@@ -1,6 +1,7 @@
 package com.github.anglepengcoding.xblue.usb;
 
 import android.app.Activity;
+import android.content.Context;
 import android.hardware.usb.UsbDevice;
 import android.util.Log;
 
@@ -16,11 +17,12 @@ import static android.content.ContentValues.TAG;
 public class UsbManger {
 
     private IUsbClient usebClient = new UsbScan();
-    public Activity mActivity;
+    public Context mContext;
 
-    public void scanUsb(IUsbTooth usbData) {
+    public void scanUsb(IUsbTooth usbData, Context context) {
+        this.mContext = context;
         try {
-            usebClient.getUsbService(mActivity);
+            usebClient.getUsbService(mContext);
             usebClient.scanUsb(usbData);
         } catch (Exception e) {
             e.printStackTrace();

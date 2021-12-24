@@ -35,9 +35,8 @@ public class WifiActivity extends Activity {
         setContentView(mRecyclerView);
         initWifiAdapter();
 
-        Toast.makeText(App.getAppContext(), "如果无数据显示,请重新关闭开启无线", Toast.LENGTH_LONG).show();
-        new XBluetooth.Builder()
-                .openWifi(WifiActivity.this)
+        new XBluetooth.Builder(getApplicationContext())
+                .openWifi()
                 .scanWiFiData(new IWifiTooth() {
                     @Override
                     public void wifiData(List<ScanResult> addDeviceList) {

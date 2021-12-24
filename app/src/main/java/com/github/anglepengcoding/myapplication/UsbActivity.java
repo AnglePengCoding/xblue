@@ -35,8 +35,7 @@ public class UsbActivity extends Activity {
         initUsbAdapter();//串口
 
         usbBuilder = new XBluetooth
-                .Builder()
-                .openUsb(UsbActivity.this)
+                .Builder(getApplicationContext())
                 .scanUsb(new IUsbTooth() {
                     @Override
                     public void scanUsbData(List<UsbDevice> usbDevices) {//扫描全部串口数据

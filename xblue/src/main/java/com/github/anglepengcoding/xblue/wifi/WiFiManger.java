@@ -28,7 +28,7 @@ public class WiFiManger {
     public IWifiTooth wifiTooth;
 
 
-    private void initWifiManager(Activity context) {
+    private void initWifiManager(Context context) {
         mWifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         Objects.requireNonNull(mWifiManager);
         mWifiInfo = mWifiManager.getConnectionInfo();
@@ -36,9 +36,9 @@ public class WiFiManger {
     }
 
 
-    public void openWifi(Activity activity) {
-        initWifiManager(activity);
-        wifiScan.openWifi(activity);
+    public void openWifi(Context  context ) {
+        initWifiManager(context);
+        wifiScan.openWifi(context);
     }
 
     public void closeWifi() {

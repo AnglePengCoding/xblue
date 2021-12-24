@@ -26,6 +26,7 @@ import java.util.List;
 public class BlueActivity extends Activity {
     private RecyclerView mRecyclerView;
     private BaseQuickAdapter<BluetoothDevice, BaseViewHolder> adapter;
+    XBluetooth.Builder builder;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,55 +34,56 @@ public class BlueActivity extends Activity {
         mRecyclerView = new RecyclerView(App.getAppContext());
         setContentView(mRecyclerView);
         initBluetoothAdapter();
-        new XBluetooth
-                .Builder(BlueActivity.this)
-                .scanBlueTooth(true, 5000) //开启扫描 停止时间
+        builder = new XBluetooth
+                .Builder(getApplicationContext())
+                .scanBlueTooth(5000) //开启扫描 停止时间
+                .scanIsPrint(true)
                 .scanCallBack(new IBlueTooth() {//搜索到蓝牙设备
                     @Override
                     public void blueData(List<BluetoothDevice> addDeviceList) {
                         adapter.setNewData(addDeviceList);
                     }
                 }).scanHistoryCallBack(new IHistoryBlueTooth() {//历史配过的蓝牙
-            @Override
-            public void historyData(List<BluetoothDevice> historyDeviceList) {
+                    @Override
+                    public void historyData(List<BluetoothDevice> historyDeviceList) {
 
-            }
-        }).blueToothState(new IBluetState() {
-            @Override
-            public void state_off() {
-                //手机蓝牙关闭
-            }
+                    }
+                }).blueToothState(new IBluetState() {
+                    @Override
+                    public void state_off() {
+                        //手机蓝牙关闭
+                    }
 
-            @Override
-            public void state_turning_off() {
-                //手机蓝牙正在关闭
-            }
+                    @Override
+                    public void state_turning_off() {
+                        //手机蓝牙正在关闭
+                    }
 
-            @Override
-            public void state_on() {
-                //手机蓝牙开启
-            }
+                    @Override
+                    public void state_on() {
+                        //手机蓝牙开启
+                    }
 
-            @Override
-            public void state_turning_on() {
-                //手机蓝牙正在开启
-            }
-        }).blueToothPairState(new IBlueToothPairState() {
-            @Override
-            public void bond_bonding() {
-                //正在配对
-            }
+                    @Override
+                    public void state_turning_on() {
+                        //手机蓝牙正在开启
+                    }
+                }).blueToothPairState(new IBlueToothPairState() {
+                    @Override
+                    public void bond_bonding() {
+                        //正在配对
+                    }
 
-            @Override
-            public void bond_bonded() {
-                //完成配对
-            }
+                    @Override
+                    public void bond_bonded() {
+                        //完成配对
+                    }
 
-            @Override
-            public void bond_none() {
-                //取消配对
-            }
-        });
+                    @Override
+                    public void bond_none() {
+                        //取消配对
+                    }
+                });
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(adapter);
@@ -98,5 +100,11 @@ public class BlueActivity extends Activity {
         };
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         mRecyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        builder.unregisterReceiver();
     }
 }

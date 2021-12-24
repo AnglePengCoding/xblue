@@ -75,8 +75,12 @@ public class UsbScan implements IUsbClient {
 
     @Override
     public void closeUsb() {
-        if (usbReceiver != null) {
-            mContext.unregisterReceiver(usbReceiver);
+        try {
+            if (usbReceiver != null) {
+                mContext.unregisterReceiver(usbReceiver);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 

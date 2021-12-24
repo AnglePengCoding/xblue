@@ -1,6 +1,7 @@
 package com.github.anglepengcoding.xblue.bluetooth;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothClass;
@@ -13,6 +14,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.Message;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
@@ -26,6 +28,8 @@ import com.github.anglepengcoding.xblue.utils.BlueUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static android.bluetooth.BluetoothDevice.ACTION_PAIRING_REQUEST;
 import static android.content.ContentValues.TAG;
@@ -40,12 +44,11 @@ import static com.github.anglepengcoding.xblue.utils.BlueUtils.isBluetoothEnable
 
 public class BluetoothManger {
 
-    public Activity activity;
+    public Context mContext;
     BluetoothAdapter mBluetoothAdapter;
     public boolean printBoolean = false;
     public List<BluetoothDevice> addDeviceList;
     public IBlueTooth iBlueTooth;
-    private Handler mAlertHandler;
     public List<BluetoothDevice> historyDeviceList;
     public IHistoryBlueTooth historyBlueTooth;
     public String address;
@@ -53,16 +56,14 @@ public class BluetoothManger {
     public IBlueToothPairState blueToothPairState;
 
     public BluetoothManger() {
-        HandlerThread thread = new HandlerThread("bluetooth searcher handler");
-        thread.start();
-        mAlertHandler = new Handler(thread.getLooper());
     }
 
-    public void scanBlueTooth(int scanMillis) {
+    public void scanBlueTooth(int scanMillis, Context context) {
+        this.mContext = context;
         if (bluetoothEnable()) {
-            BlueUtils.openBluetooth(activity.getApplicationContext());
+            BlueUtils.openBluetooth(context);
         }
-        int permissionCheck = ContextCompat.checkSelfPermission(activity,
+        int permissionCheck = ContextCompat.checkSelfPermission(context,
                 Manifest.permission.ACCESS_COARSE_LOCATION);
 
         if (permissionCheck != PackageManager.PERMISSION_GRANTED
@@ -83,31 +84,48 @@ public class BluetoothManger {
         addDeviceList = new ArrayList<>();
         historyDeviceList = new ArrayList<>();
 
-        initBluetoothReceiver(activity);
+        initBluetoothReceiver(mContext);
         try {
             mBluetoothAdapter.startDiscovery();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        mAlertHandler.postDelayed(new Runnable() {
-            @Override
+
+        TimerTask task = new TimerTask() {
             public void run() {
-                cancelSearchBluetooth();
+                Message msg = new Message();
+                msg.what = 0;
+                change.handleMessage(msg);
             }
-        }, scanMillis);
+        };
+        Timer timer = new Timer();
+        timer.schedule(task, scanMillis);
 
         getPairedData();
 
     }
 
 
+    @SuppressLint("HandlerLeak")
+    private
+    Handler change = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 0) {
+                cancelSearchBluetooth();
+            }
+        }
+    };
+
     /**
      * 停止扫描
      */
     public void cancelSearchBluetooth() {
-        if (!isBluetoothEnabled()) {
-            Log.e(TAG, "bluetoothAdapter is not enabled");
-            throw new NullPointerException();
+        if (isScanning()) {
+            if (mBluetoothAdapter != null) {
+                mBluetoothAdapter.cancelDiscovery();
+            }
         }
 
     }
@@ -120,7 +138,7 @@ public class BluetoothManger {
     private boolean isScanning() {
         try {
             return mBluetoothAdapter.isDiscovering();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return false;
@@ -128,11 +146,11 @@ public class BluetoothManger {
 
 
     private boolean bluetoothEnable() {
-        return BlueUtils.bluetoothEnable(activity.getApplicationContext());
+        return BlueUtils.bluetoothEnable(mContext);
     }
 
 
-    private void initBluetoothReceiver(Activity activity) {
+    private void initBluetoothReceiver(Context context) {
 
         IntentFilter intent = new IntentFilter();
         intent.addAction(BluetoothDevice.ACTION_FOUND);// 用BroadcastReceiver来取得搜索结果
@@ -144,16 +162,15 @@ public class BluetoothManger {
         intent.addAction(ACTION_PAIRING_REQUEST);
         intent.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
         intent.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED);
-        activity.registerReceiver(bluetoothReceiver, intent);
+        context.registerReceiver(bluetoothReceiver, intent);
 
     }
 
-    public void unregisterReceiver(Activity activity) {
+    public void unregisterReceiver() {
         try {
-            if (bluetoothReceiver!=null){
-                activity.unregisterReceiver(bluetoothReceiver);
-            }
-        }catch (Exception e){
+            change.removeMessages(1);
+            mContext.unregisterReceiver(bluetoothReceiver);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -209,19 +226,19 @@ public class BluetoothManger {
                 switch (device.getBondState()) {
                     case BluetoothDevice.BOND_BONDING:
                         //正在配对
-                        if (blueToothPairState!=null){
+                        if (blueToothPairState != null) {
                             blueToothPairState.bond_bonding();
                         }
                         break;
                     case BluetoothDevice.BOND_BONDED:
                         //完成配对
-                        if (blueToothPairState!=null){
+                        if (blueToothPairState != null) {
                             blueToothPairState.bond_bonded();
                         }
                         break;
                     case BluetoothDevice.BOND_NONE:
                         //取消配对
-                        if (blueToothPairState!=null){
+                        if (blueToothPairState != null) {
                             blueToothPairState.bond_none();
                         }
                     default:

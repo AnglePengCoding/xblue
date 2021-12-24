@@ -12,7 +12,7 @@ import android.net.wifi.WifiManager;
 
 public interface WifiClient {
 
-    void openWifi(Activity activity );
+    void openWifi(Context activity );
 
     void closeWifi();
 
