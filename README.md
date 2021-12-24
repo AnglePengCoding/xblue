@@ -19,9 +19,11 @@ maven { url 'https://jitpack.io' }
 
 <h3> Step 2. Add the dependency </h3>
 
+版本号 [![](https://jitpack.io/v/AnglePengCoding/xblue.svg)](https://jitpack.io/#AnglePengCoding/xblue)
+
 ```java  
 
-implementation 'com.github.AnglePengCoding:xblue:1.4'
+implementation 'com.github.AnglePengCoding:xblue:1.6'
 
 ```
 
