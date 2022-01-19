@@ -56,6 +56,7 @@ public class BluetoothManger {
     public IBluetState bluetState;
     public IBlueToothPairState blueToothPairState;
     public IBlueToothScanState scanState;
+
     public BluetoothManger() {
     }
 
@@ -103,7 +104,14 @@ public class BluetoothManger {
         timer.schedule(task, scanMillis);
 
         getPairedData();
-
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (historyBlueTooth!=null){
+                    historyBlueTooth.historyData(historyDeviceList);
+                }
+            }
+        }).start();
     }
 
 
@@ -218,11 +226,11 @@ public class BluetoothManger {
                 }
             } else if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
                 Log.e(TAG, " BluetoothDevice ACTION_DISCOVERY_STARTED");
-                if (scanState!=null){
+                if (scanState != null) {
                     scanState.started();
                 }
             } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
-                if (scanState!=null){
+                if (scanState != null) {
                     scanState.finished();
                 }
                 Log.e(TAG, " BluetoothDevice ACTION_DISCOVERY_FINISHED");
@@ -312,9 +320,6 @@ public class BluetoothManger {
                     historyDeviceList.add(device);
                 }
             }
-        }
-        if (historyBlueTooth != null) {
-            historyBlueTooth.historyData(historyDeviceList);
         }
     }
 
